@@ -64,4 +64,5 @@ Server: Railway 🚂
 Version: v1.0
 Status: Running Smoothly 🚀"""
     )
+
 bot.infinity_polling(skip_pending=True)
