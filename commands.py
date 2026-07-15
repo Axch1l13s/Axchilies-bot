@@ -78,6 +78,10 @@ Available Commands
                 message,
                 f"""💰 {name} ({symbol})
 
+            bot.reply_to(
+                message,
+                f"""💰 {name} ({symbol})
+
 Price: ${price_usd:,.2f}
 24H: {change:.2f}%
 
@@ -85,20 +89,4 @@ Source: CoinGecko"""
             )
 
         except Exception as e:
-            bot.reply_to(message, f"Error: {e}")price_change_percentage_24h"]
-        mc = data["market_data"]["market_cap"]["usd"]
-
-        bot.reply_to(
-            message,
-            f"""💰 {name} ({symbol})
-
-Price: ${price:,.2f}
-24H: {change:.2f}%
-Market Cap: ${mc:,.0f}
-
-Source: CoinGecko"""
-        )
-
-    except Exception as e:
-        bot.reply_to(message, f"Error: {e}")
-        bot.reply_to(message, "🟢 Bot Status: Online")
+            bot.reply_to(message, f"Error: {e}")
