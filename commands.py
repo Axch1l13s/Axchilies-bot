@@ -1,0 +1,47 @@
+from telebot import TeleBot
+
+def register_commands(bot: TeleBot):
+
+    @bot.message_handler(commands=['start'])
+    def start(message):
+        bot.reply_to(
+            message,
+            """🚀 Welcome to Axchilies Alpha Scanner
+
+Your AI-powered assistant for discovering early crypto opportunities.
+
+📊 Features:
+• 🚨 New Pair Alerts
+• 🐋 Smart Money Tracking
+• 🔍 Token Risk Analysis
+• 📈 Market Monitoring
+• ⚡ Real-Time Notifications
+
+Type /help to view all available commands.
+
+💎 Stay early. Stay ahead. Catch the next 100x."""
+        )
+
+    @bot.message_handler(commands=['help'])
+    def help_command(message):
+        bot.reply_to(
+            message,
+            """📚 Axchilies Alpha Scanner
+
+Available Commands
+
+🚀 /start
+📖 /help
+🏓 /ping
+📊 /status
+
+🚧 More features coming soon..."""
+        )
+
+    @bot.message_handler(commands=['ping'])
+    def ping(message):
+        bot.reply_to(message, "🏓 Pong!")
+
+    @bot.message_handler(commands=['status'])
+    def status(message):
+        bot.reply_to(message, "🟢 Bot Status: Online")
