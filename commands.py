@@ -1,3 +1,6 @@
+
+import requests
+
 from telebot import TeleBot
 
 def register_commands(bot: TeleBot):
