@@ -27,7 +27,6 @@ Type /help to view all available commands.
 
 print("Bot Running...")
 
-bot.infinity_polling(skip_pending=True)
 
 @bot.message_handler(commands=['help'])
 def help_command(message):
@@ -65,3 +64,4 @@ Server: Railway 🚂
 Version: v1.0
 Status: Running Smoothly 🚀"""
     )
+bot.infinity_polling(skip_pending=True)
