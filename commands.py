@@ -48,19 +48,18 @@ Available Commands
     def status(message):
         bot.reply_to(message, "🟢 Bot Status: Online")
 
-    @bot.message_handler(commands=['price'])
+        @bot.message_handler(commands=['price'])
     def price(message):
         try:
             args = message.text.split()
 
             if len(args) < 2:
-                bot.reply_to(message, "Usage:\n/price solana\n/price bitcoin")
+                bot.reply_to(message, "Usage:\n/price solana")
                 return
 
             coin = args[1].lower()
 
             url = f"https://api.coingecko.com/api/v3/coins/{coin}"
-
             r = requests.get(url)
 
             if r.status_code != 200:
@@ -74,19 +73,14 @@ Available Commands
             price_usd = data["market_data"]["current_price"]["usd"]
             change = data["market_data"]["price_change_percentage_24h"]
 
-            bot.reply_to(
-                message,
-                f"""💰 {name} ({symbol})
-
-            bot.reply_to(
-                message,
-                f"""💰 {name} ({symbol})
-
-Price: ${price_usd:,.2f}
-24H: {change:.2f}%
-
-Source: CoinGecko"""
+            text = (
+                f"💰 {name} ({symbol})\n\n"
+                f"Price: ${price_usd:,.2f}\n"
+                f"24H: {change:.2f}%\n\n"
+                f"Source: CoinGecko"
             )
+
+            bot.reply_to(message, text)
 
         except Exception as e:
             bot.reply_to(message, f"Error: {e}")
