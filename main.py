@@ -1,8 +1,8 @@
 import os
+import threading
 from flask import Flask
 from telegram import Update
-from telegram.ext import Application, CommandHandler, ContextTypes
-import threading
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
 app = Flask(__name__)
 
@@ -10,18 +10,17 @@ app = Flask(__name__)
 def home():
     return "Axchilies Alpha Bot Running!"
 
-BOT_TOKEN = os.getenv("BOT_TOKEN")
+BOT_TOKEN = os.environ["BOT_TOKEN"]
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(
-        "🔥 Welcome to Axchilies Alpha Bot!\n\nBot berhasil online."
-    )
+    await update.message.reply_text("🔥 Axchilies Alpha Bot Online!")
 
-def run_bot():
-    application = Application.builder().token(BOT_TOKEN).build()
-    application.add_handler(CommandHandler("start", start))
-    application.run_polling()
+def telegram_bot():
+    app_bot = ApplicationBuilder().token(BOT_TOKEN).build()
+    app_bot.add_handler(CommandHandler("start", start))
+    app_bot.run_polling()
+
+threading.Thread(target=telegram_bot, daemon=True).start()
 
 if __name__ == "__main__":
-    threading.Thread(target=run_bot).start()
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
