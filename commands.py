@@ -1,6 +1,4 @@
-
 import requests
-
 from telebot import TeleBot
 
 def register_commands(bot: TeleBot):
@@ -37,6 +35,7 @@ Available Commands
 📖 /help
 🏓 /ping
 📊 /status
+💰 /price <coin>
 
 🚧 More features coming soon..."""
         )
@@ -47,34 +46,46 @@ Available Commands
 
     @bot.message_handler(commands=['status'])
     def status(message):
-@bot.message_handler(commands=['price'])
-def price(message):
-    try:
-        args = message.text.split()
+        bot.reply_to(message, "🟢 Bot Status: Online")
 
-        if len(args) < 2:
+    @bot.message_handler(commands=['price'])
+    def price(message):
+        try:
+            args = message.text.split()
+
+            if len(args) < 2:
+                bot.reply_to(message, "Usage:\n/price solana\n/price bitcoin")
+                return
+
+            coin = args[1].lower()
+
+            url = f"https://api.coingecko.com/api/v3/coins/{coin}"
+
+            r = requests.get(url)
+
+            if r.status_code != 200:
+                bot.reply_to(message, "❌ Coin not found.")
+                return
+
+            data = r.json()
+
+            name = data["name"]
+            symbol = data["symbol"].upper()
+            price_usd = data["market_data"]["current_price"]["usd"]
+            change = data["market_data"]["price_change_percentage_24h"]
+
             bot.reply_to(
                 message,
-                "Usage:\n/price sol\n/price btc\n/price eth"
+                f"""💰 {name} ({symbol})
+
+Price: ${price_usd:,.2f}
+24H: {change:.2f}%
+
+Source: CoinGecko"""
             )
-            return
 
-        coin = args[1].lower()
-
-        url = f"https://api.coingecko.com/api/v3/coins/{coin}"
-
-        r = requests.get(url)
-
-        if r.status_code != 200:
-            bot.reply_to(message, "❌ Coin not found.")
-            return
-
-        data = r.json()
-
-        name = data["name"]
-        symbol = data["symbol"].upper()
-        price = data["market_data"]["current_price"]["usd"]
-        change = data["market_data"]["price_change_percentage_24h"]
+        except Exception as e:
+            bot.reply_to(message, f"Error: {e}")price_change_percentage_24h"]
         mc = data["market_data"]["market_cap"]["usd"]
 
         bot.reply_to(
