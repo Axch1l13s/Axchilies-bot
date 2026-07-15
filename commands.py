@@ -48,7 +48,7 @@ Available Commands
     def status(message):
         bot.reply_to(message, "🟢 Bot Status: Online")
 
-        @bot.message_handler(commands=['price'])
+    @bot.message_handler(commands=['price'])
     def price(message):
         try:
             args = message.text.split()
