@@ -1,2 +1,2 @@
 # Axchilies-bot
-bot tracking solana meme
+bot tracking alpha
