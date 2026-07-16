@@ -55,6 +55,13 @@ Available Commands
 
             if len(args) < 2:
                 bot.reply_to(message, "Usage:\n/price solana")
+
+    @bot.message_handler(commands=['newpairs'])
+def newpairs(message):
+    bot.reply_to(
+        message,
+        "🚧 New Pair Scanner is under development.\n\nNext update will include live DexScreener data."
+    )
                 return
 
             coin = args[1].lower()
