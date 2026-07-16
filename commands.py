@@ -248,22 +248,17 @@ Coming Soon
 💧 Liquidity : ${result.get('liquidity',0):,.0f}
 📈 Volume (24H) : ${result.get('volume',0):,.0f}
 🕒 Pair Age : {pair_age}
-
 ⭐ Alpha Score : {score}/100
 📊 Rating : {rating}
 ⚠️ Risk : {risk}
-
 🛡 Security Check
-Mint Authority : {security.get('mint_authority','Unknown')}
-Freeze Authority : {security.get('freeze_authority','Unknown')}
-Security Risk : {security.get('risk','Unknown')}
-
+   Mint Authority : {security.get('mint_authority','Unknown')}
+   Freeze Authority : {security.get('freeze_authority','Unknown')}
+   Security Risk : {security.get('risk','Unknown')}
 🚨 Warnings :
 {warning_text}
-
 🏦 DEX : {result.get('dex','Unknown')}
 ⛓ Chain : {result.get('chain','Solana')}
-
 🔗 Chart :
 {result.get('url','N/A')}
 
