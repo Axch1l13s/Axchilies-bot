@@ -158,16 +158,25 @@ Example:
 
         contract = args[1]
 
-        bot.reply_to(
-            message,
-            f"""🔍 Token Scan
+        result = scan_token(contract)
 
-Contract:
-{contract}
+        if result is None:
+            bot.reply_to(message, "❌ Token not found.")
+            return
 
-🟢 Status: Scanning...
+        text = f"""🔍 Token Analysis
 
-🚧 Live DexScreener analysis coming soon.
+🪙 Token: {result['name']} ({result['symbol']})
 
-Stay tuned! 🚀"""
-        )
+💵 Price: ${result['price']}
+💧 Liquidity: ${result['liquidity']:,.0f}
+📈 Volume (24H): ${result['volume']:,.0f}
+
+🏦 DEX: {result['dex']}
+⛓ Chain: {result['chain']}
+
+🔗 Chart:
+{result['url']}
+"""
+
+        bot.reply_to(message, text)
