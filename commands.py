@@ -1,4 +1,5 @@
 import requests
+import re
 from telebot import TeleBot
 from scanner import scan_token
 
@@ -180,3 +181,34 @@ Example:
 """
 
         bot.reply_to(message, text)
+
+    @bot.message_handler(func=lambda message: True)
+def auto_scan(message):
+
+    text = message.text.strip()
+
+    # Deteksi contract Solana (panjang sekitar 32-44 karakter)
+    if re.fullmatch(r"[1-9A-HJ-NP-Za-km-z]{32,44}", text):
+
+        result = scan_token(text)
+
+        if result is None:
+            bot.reply_to(message, "❌ Token not found.")
+            return
+
+        reply = f"""🔍 Token Analysis
+
+🪙 Token: {result['name']} ({result['symbol']})
+
+💵 Price: ${result['price']}
+💧 Liquidity: ${result['liquidity']:,.0f}
+📈 Volume (24H): ${result['volume']:,.0f}
+
+🏦 DEX: {result['dex']}
+⛓ Chain: {result['chain']}
+
+🔗 Chart:
+{result['url']}
+"""
+
+        bot.reply_to(message, reply)
