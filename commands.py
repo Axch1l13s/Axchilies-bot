@@ -180,15 +180,14 @@ Example:
 {result['url']}
 """
 
-        bot.reply_to(message, text)
+        @bot.message_handler(func=lambda message: True)
+    def auto_scan(message):
 
-    @bot.message_handler(func=lambda message: True)
-def auto_scan(message):
+        text = message.text.strip()
 
-    text = message.text.strip()
-
-    # Deteksi contract Solana (panjang sekitar 32-44 karakter)
-    if re.fullmatch(r"[1-9A-HJ-NP-Za-km-z]{32,44}", text):
+        # Deteksi Contract Address Solana
+        if not re.fullmatch(r"[1-9A-HJ-NP-Za-km-z]{32,44}", text):
+            return
 
         result = scan_token(text)
 
