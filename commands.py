@@ -4,6 +4,9 @@ from telebot import TeleBot
 
 def register_commands(bot: TeleBot):
 
+    # ==========================
+    # START
+    # ==========================
     @bot.message_handler(commands=['start'])
     def start(message):
         bot.reply_to(
@@ -14,8 +17,8 @@ Your AI-powered assistant for discovering early crypto opportunities.
 
 📊 Features:
 • 🚨 New Pair Alerts
-• 🐋 Smart Money Tracking
-• 🔍 Token Risk Analysis
+• 🔍 Token Scanner
+• 💰 Live Crypto Prices
 • 📈 Market Monitoring
 • ⚡ Real-Time Notifications
 
@@ -24,6 +27,9 @@ Type /help to view all available commands.
 💎 Stay early. Stay ahead. Catch the next 100x."""
         )
 
+    # ==========================
+    # HELP
+    # ==========================
     @bot.message_handler(commands=['help'])
     def help_command(message):
         bot.reply_to(
@@ -37,19 +43,36 @@ Available Commands
 🏓 /ping
 📊 /status
 💰 /price <coin>
+🔍 /scan <contract>
 🚨 /newpairs
 
-🚧 More features coming soon..."""
+Examples
+
+/price solana
+/price bitcoin
+
+/scan So11111111111111111111111111111111111111112
+
+🚀 More features coming soon..."""
         )
 
+    # ==========================
+    # PING
+    # ==========================
     @bot.message_handler(commands=['ping'])
     def ping(message):
         bot.reply_to(message, "🏓 Pong!")
 
+    # ==========================
+    # STATUS
+    # ==========================
     @bot.message_handler(commands=['status'])
     def status(message):
         bot.reply_to(message, "🟢 Bot Status: Online")
 
+    # ==========================
+    # PRICE
+    # ==========================
     @bot.message_handler(commands=['price'])
     def price(message):
         try:
@@ -90,6 +113,9 @@ Available Commands
         except Exception as e:
             bot.reply_to(message, f"Error: {e}")
 
+    # ==========================
+    # NEW PAIRS
+    # ==========================
     @bot.message_handler(commands=['newpairs'])
     def newpairs(message):
         bot.reply_to(
@@ -98,39 +124,49 @@ Available Commands
 
 This feature is currently under development.
 
-The next update will include:
+Next update:
 • 🚨 Live DexScreener Scanner
 • 💧 Liquidity Filter
 • 💰 Market Cap Filter
-• ⏱️ Pair Age Filter
+• ⏱ Pair Age Filter
 • 📲 Telegram Alerts
 
 Stay tuned! 🚀"""
+        )
 
-   @bot.message_handler(commands=['scan'])
+    # ==========================
+    # SCAN
+    # ==========================
+    @bot.message_handler(commands=['scan'])
     def scan(message):
-    args = message.text.split()
 
-    if len(args) < 2:
+        args = message.text.split()
+
+        if len(args) < 2:
+            bot.reply_to(
+                message,
+                """Usage:
+
+/scan <contract_address>
+
+Example:
+
+/scan So11111111111111111111111111111111111111112"""
+            )
+            return
+
+        contract = args[1]
+
         bot.reply_to(
             message,
-            "Usage:\n/scan <contract_address>"
-        )
-        return
-
-    ca = args[1]
-
-    bot.reply_to(
-        message,
-        f"""🔍 Token Scan
+            f"""🔍 Token Scan
 
 Contract:
-{ca}
+{contract}
 
 🟢 Status: Scanning...
 
-🚧 Live analysis will be added in the next update.
+🚧 Live DexScreener analysis coming soon.
 
 Stay tuned! 🚀"""
-    )
         )
