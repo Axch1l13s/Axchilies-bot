@@ -18,13 +18,13 @@ def scan_token(contract):
     pair = data["pairs"][0]
 
     return {
-    "name": pair["baseToken"]["name"],
-    "symbol": pair["baseToken"]["symbol"],
-    "price": pair.get("priceUsd", "N/A"),
-    "liquidity": pair["liquidity"]["usd"],
-    "volume": pair["volume"]["h24"],
-    "marketcap": pair.get("marketCap", 0),
-    "dex": pair["dexId"],
-    "chain": pair["chainId"],
-    "url": pair["url"]
-}
+        "name": pair["baseToken"]["name"],
+        "symbol": pair["baseToken"]["symbol"],
+        "price": pair.get("priceUsd", "N/A"),
+        "liquidity": pair["liquidity"]["usd"],
+        "volume": pair["volume"]["h24"],
+        "marketcap": pair.get("marketCap", 0),
+        "dex": pair["dexId"],
+        "chain": pair["chainId"],
+        "url": pair["url"]
+    }
