@@ -1,5 +1,6 @@
 import requests
 import re
+import time
 from telebot import TeleBot
 from scanner import scan_token
 
