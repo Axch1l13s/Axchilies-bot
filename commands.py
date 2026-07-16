@@ -106,4 +106,31 @@ The next update will include:
 • 📲 Telegram Alerts
 
 Stay tuned! 🚀"""
+
+   @bot.message_handler(commands=['scan'])
+def scan(message):
+    args = message.text.split()
+
+    if len(args) < 2:
+        bot.reply_to(
+            message,
+            "Usage:\n/scan <contract_address>"
+        )
+        return
+
+    ca = args[1]
+
+    bot.reply_to(
+        message,
+        f"""🔍 Token Scan
+
+Contract:
+{ca}
+
+🟢 Status: Scanning...
+
+🚧 Live analysis will be added in the next update.
+
+Stay tuned! 🚀"""
+    )
         )
