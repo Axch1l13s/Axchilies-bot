@@ -232,6 +232,12 @@ ${result['volume']:,.0f}
 📊 Rating
 {rating}
 
+⚠️ Risk
+{risk}
+
+🚨 Warnings
+{"\n".join(warnings) if warnings else "✅ No major warnings detected"}
+
 🏦 DEX
 {result['dex']}
 
@@ -240,5 +246,8 @@ ${result['volume']:,.0f}
 
 🔗 Chart
 {result['url']}
+
+━━━━━━━━━━━━━━━
+⚡ Powered by Axchilies Alpha Scanner
 """
-        )
+)
