@@ -238,16 +238,22 @@ Coming Soon
 
 🪙 Token
 {result['name']} ({result['symbol']})
+
 💵 Price
 ${result['price']}
+
 💰 Market Cap
 ${result['marketcap']:,.0f}
+
 💧 Liquidity
 ${result['liquidity']:,.0f}
+
 📈 Volume (24H)
 ${result['volume']:,.0f}
+
 🕒 Pair Age
 {pair_age}
+
 ⭐ Alpha Score
 {score}/100
 📊 Rating
