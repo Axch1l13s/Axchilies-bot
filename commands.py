@@ -1,6 +1,7 @@
 import requests
 from telebot import TeleBot
 
+
 def register_commands(bot: TeleBot):
 
     @bot.message_handler(commands=['start'])
@@ -36,6 +37,7 @@ Available Commands
 🏓 /ping
 📊 /status
 💰 /price <coin>
+🚨 /newpairs
 
 🚧 More features coming soon..."""
         )
@@ -54,14 +56,10 @@ Available Commands
             args = message.text.split()
 
             if len(args) < 2:
-                bot.reply_to(message, "Usage:\n/price solana")
-
-    @bot.message_handler(commands=['newpairs'])
-def newpairs(message):
-    bot.reply_to(
-        message,
-        "🚧 New Pair Scanner is under development.\n\nNext update will include live DexScreener data."
-    )
+                bot.reply_to(
+                    message,
+                    "Usage:\n/price solana\n/price bitcoin\n/price ethereum"
+                )
                 return
 
             coin = args[1].lower()
@@ -83,7 +81,7 @@ def newpairs(message):
             text = (
                 f"💰 {name} ({symbol})\n\n"
                 f"Price: ${price_usd:,.2f}\n"
-                f"24H: {change:.2f}%\n\n"
+                f"24H Change: {change:.2f}%\n\n"
                 f"Source: CoinGecko"
             )
 
@@ -91,3 +89,21 @@ def newpairs(message):
 
         except Exception as e:
             bot.reply_to(message, f"Error: {e}")
+
+    @bot.message_handler(commands=['newpairs'])
+    def newpairs(message):
+        bot.reply_to(
+            message,
+            """🚧 New Pair Scanner
+
+This feature is currently under development.
+
+The next update will include:
+• 🚨 Live DexScreener Scanner
+• 💧 Liquidity Filter
+• 💰 Market Cap Filter
+• ⏱️ Pair Age Filter
+• 📲 Telegram Alerts
+
+Stay tuned! 🚀"""
+        )
