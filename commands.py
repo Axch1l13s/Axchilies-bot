@@ -159,9 +159,16 @@ Coming Soon
 
         result = scan_token(contract)
 
-        if result is None:
-            bot.reply_to(message, "❌ Token not found.")
-            return
+        result = scan_token(contract)
+
+result = scan_token(contract)
+
+       if result is None:
+           bot.reply_to(message, "❌ Token not found.")
+    return
+
+# SECURITY CHECK
+security = check_security(contract)
 
         # ==========================
         # PAIR AGE
