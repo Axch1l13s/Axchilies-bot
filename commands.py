@@ -1,3 +1,4 @@
+from scanner import scan_token
 import requests
 from telebot import TeleBot
 
