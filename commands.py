@@ -152,6 +152,7 @@ Coming Soon
 
         contract = message.text.strip()
 
+        # Cek apakah pesan adalah Solana Contract Address
         if not re.fullmatch(r"[1-9A-HJ-NP-Za-km-z]{32,44}", contract):
             return
 
@@ -161,24 +162,46 @@ Coming Soon
             bot.reply_to(message, "❌ Token not found.")
             return
 
-        # Pair Age
+        # ==========================
+        # PAIR AGE
+        # ==========================
         created = result.get("created", 0)
 
         if created:
-
             minutes = int((time.time() * 1000 - created) / 60000)
 
             if minutes < 60:
                 pair_age = f"{minutes} Minutes"
-
             elif minutes < 1440:
                 pair_age = f"{minutes // 60} Hours"
-
             else:
                 pair_age = f"{minutes // 1440} Days"
-
         else:
             pair_age = "Unknown"
+            minutes = 999999
+
+        # ==========================
+        # ALPHA SCORE
+        # ==========================
+        score = 50
+
+        if result["liquidity"] >= 10000:
+            score += 15
+
+        if result["volume"] >= 50000:
+            score += 15
+
+        if result["marketcap"] >= 100000:
+            score += 20
+
+        if score >= 90:
+            rating = "🟢 Excellent"
+        elif score >= 75:
+            rating = "🟢 Good"
+        elif score >= 60:
+            rating = "🟡 Moderate"
+        else:
+            rating = "🔴 High Risk"
 
         # ==========================
         # RISK ANALYSIS
@@ -191,18 +214,19 @@ Coming Soon
         if result["marketcap"] < 25000:
             warnings.append("🟡 Very Low Market Cap")
 
-        if created and minutes < 10:
+        if minutes < 10:
             warnings.append("🟠 Very New Pair")
 
-        if score >= 90:
+        if len(warnings) == 0:
             risk = "🟢 LOW"
-
-        elif score >= 75:
+        elif len(warnings) == 1:
             risk = "🟡 MEDIUM"
-
         else:
             risk = "🔴 HIGH"
 
+        # ==========================
+        # REPLY
+        # ==========================
         bot.reply_to(
             message,
             f"""🚀 Axchilies Alpha Scanner
@@ -249,4 +273,4 @@ ${result['volume']:,.0f}
 ━━━━━━━━━━━━━━━
 ⚡ Powered by Axchilies Alpha Scanner
 """
-)
+        )
