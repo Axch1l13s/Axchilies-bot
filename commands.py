@@ -180,29 +180,28 @@ Coming Soon
         else:
             pair_age = "Unknown"
 
-        # Alpha Score
-        score = 50
+        # ==========================
+        # RISK ANALYSIS
+        # ==========================
+        warnings = []
 
-        if result["liquidity"] >= 10000:
-            score += 15
+        if result["liquidity"] < 5000:
+            warnings.append("🔴 Very Low Liquidity")
 
-        if result["volume"] >= 50000:
-            score += 15
+        if result["marketcap"] < 25000:
+            warnings.append("🟡 Very Low Market Cap")
 
-        if result["marketcap"] >= 100000:
-            score += 20
+        if created and minutes < 10:
+            warnings.append("🟠 Very New Pair")
 
         if score >= 90:
-            rating = "🟢 Excellent"
+            risk = "🟢 LOW"
 
         elif score >= 75:
-            rating = "🟢 Good"
-
-        elif score >= 60:
-            rating = "🟡 Moderate"
+            risk = "🟡 MEDIUM"
 
         else:
-            rating = "🔴 High Risk"
+            risk = "🔴 HIGH"
 
         bot.reply_to(
             message,
