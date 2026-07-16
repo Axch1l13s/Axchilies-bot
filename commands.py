@@ -237,7 +237,7 @@ Coming Soon
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 🪙 Token
-{result['name']} ({result['symbol']}
+{result['name']} ({result[$'symbol']})
 
 💵 Price : ${result['price']}
 💰 Market Cap : ${result['marketcap']:,.0f}
