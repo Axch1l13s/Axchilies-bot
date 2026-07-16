@@ -234,7 +234,7 @@ Coming Soon
         # ==========================
         text = f"""🚀 Axchilies Alpha Scanner
 
-━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━
 
 🪙 Token
 {result['name']} ({result['symbol']})
@@ -252,7 +252,7 @@ Coming Soon
 ⛓ Chain : {result['chain']}
 🔗 Chart : {result['url']}
 
-━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━
 ⚡ Powered by Axchilies Alpha Scanner
 """
 
