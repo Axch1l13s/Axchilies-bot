@@ -137,52 +137,6 @@ Stay tuned! 🚀"""
         )
 
     # ==========================
-    # SCAN
-    # ==========================
-    @bot.message_handler(commands=['scan'])
-    def scan(message):
-
-        args = message.text.split()
-
-        if len(args) < 2:
-            bot.reply_to(
-                message,
-                """Usage:
-
-/scan <contract_address>
-
-Example:
-
-/scan So11111111111111111111111111111111111111112"""
-            )
-            return
-
-        contract = args[1]
-
-        result = scan_token(contract)
-
-        if result is None:
-            bot.reply_to(message, "❌ Token not found.")
-            return
-
-        text = f"""🔍 Token Analysis
-
-🪙 Token: {result['name']} ({result['symbol']})
-
-💵 Price: ${result['price']}
-💧 Liquidity: ${result['liquidity']:,.0f}
-📈 Volume (24H): ${result['volume']:,.0f}
-
-🏦 DEX: {result['dex']}
-⛓ Chain: {result['chain']}
-
-🔗 Chart:
-{result['url']}
-"""
-
-        bot.reply_to(message, text)
-
-    # ==========================
     # AUTO SCAN
     # ==========================
     @bot.message_handler(func=lambda message: True)
