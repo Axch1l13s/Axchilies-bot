@@ -234,10 +234,10 @@ Coming Soon
         # ==========================
         text = f"""🚀 Axchilies Alpha Scanner
 
-━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 🪙 Token
-{result['name']} ({result['$symbol']}
+{result['name']} ({result['symbol']}
 
 💵 Price : ${result['price']}
 💰 Market Cap : ${result['marketcap']:,.0f}
@@ -252,7 +252,7 @@ Coming Soon
 ⛓ Chain : {result['chain']}
 🔗 Chart : {result['url']}
 
-━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ⚡ Powered by Axchilies Alpha Scanner
 """
 
