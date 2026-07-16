@@ -108,7 +108,7 @@ The next update will include:
 Stay tuned! 🚀"""
 
    @bot.message_handler(commands=['scan'])
-def scan(message):
+    def scan(message):
     args = message.text.split()
 
     if len(args) < 2:
