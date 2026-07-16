@@ -3,6 +3,7 @@ import re
 import time
 from telebot import TeleBot
 from scanner import scan_token
+from security import check_security
 
 
 def register_commands(bot: TeleBot):
