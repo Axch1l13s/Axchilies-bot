@@ -6,6 +6,13 @@ from scanner import scan_token
 from security import check_security
 
 
+def safe_float(value):
+    try:
+        return float(value or 0)
+    except:
+        return 0
+
+
 def register_commands(bot: TeleBot):
 
     # ==========================
@@ -31,6 +38,7 @@ Paste any Solana Contract Address to start scanning.
 💎 Stay Early. Stay Ahead."""
         )
 
+
     # ==========================
     # HELP
     # ==========================
@@ -49,18 +57,13 @@ Commands
 💰 /price <coin>
 🚨 /newpairs
 
-Examples
+Example:
 
 /price solana
-/price bitcoin
 
-Or simply paste any Solana Contract Address.
-
-Example
-
-So11111111111111111111111111111111111111112
-"""
+Or paste Solana Contract Address."""
         )
+
 
     # ==========================
     # PING
@@ -69,12 +72,14 @@ So11111111111111111111111111111111111111112
     def ping(message):
         bot.reply_to(message, "🏓 Pong!")
 
+
     # ==========================
     # STATUS
     # ==========================
     @bot.message_handler(commands=['status'])
     def status(message):
         bot.reply_to(message, "🟢 Bot Status: Online")
+
 
     # ==========================
     # PRICE
@@ -87,183 +92,248 @@ So11111111111111111111111111111111111111112
             args = message.text.split()
 
             if len(args) < 2:
-                bot.reply_to(
-                    message,
-                    "Usage:\n/price solana\n/price bitcoin"
-                )
+                bot.reply_to(message, "Usage: /price solana")
                 return
 
             coin = args[1].lower()
 
             url = f"https://api.coingecko.com/api/v3/coins/{coin}"
 
-            r = requests.get(url)
+            r = requests.get(url, timeout=10)
 
             if r.status_code != 200:
-                bot.reply_to(message, "❌ Coin not found.")
+                bot.reply_to(message, "❌ Coin not found")
                 return
 
             data = r.json()
 
-            name = data["name"]
-            symbol = data["symbol"].upper()
-            price = data["market_data"]["current_price"]["usd"]
+            current = data["market_data"]["current_price"]["usd"]
             change = data["market_data"]["price_change_percentage_24h"]
 
             bot.reply_to(
                 message,
-                f"""💰 {name} ({symbol})
+                f"""💰 {data['name']} ({data['symbol'].upper()})
 
-Price
-${price:,.4f}
+Price:
+${current}
 
-24H Change
+24H:
 {change:.2f}%
 
-Source
+Source:
 CoinGecko"""
             )
 
         except Exception as e:
-            bot.reply_to(message, f"Error: {e}")
+            print("PRICE ERROR:", e)
+            bot.reply_to(message, "❌ Price service error")
+
 
     # ==========================
-    # NEWPAIRS
+    # NEW PAIRS
     # ==========================
     @bot.message_handler(commands=['newpairs'])
     def newpairs(message):
+
         bot.reply_to(
             message,
             """🚧 New Pair Scanner
 
 Coming Soon
 
-• Live DexScreener Feed
-• Pair Age Filter
+• DexScreener Feed
 • Liquidity Filter
-• MarketCap Filter
-• Telegram Alerts"""
+• Market Cap Filter
+• Smart Money Tracking"""
         )
+
 
     # ==========================
     # AUTO SCAN
     # ==========================
-    @bot.message_handler(func=lambda message: True)
+    @bot.message_handler(func=lambda message: message.content_type == "text")
     def auto_scan(message):
 
-        contract = message.text.strip()
+        try:
 
-        # Cek apakah pesan adalah Solana Contract Address
-        if not re.fullmatch(r"[1-9A-HJ-NP-Za-km-z]{32,44}", contract):
-            return
+            contract = message.text.strip()
 
-        result = scan_token(contract)
+            if not re.fullmatch(
+                r"[1-9A-HJ-NP-Za-km-z]{32,44}",
+                contract
+            ):
+                return
 
-        if result is None:
-            bot.reply_to(message, "❌ Token not found.")
-            return
 
-        # SECURITY CHECK
-        security = check_security(contract)
+            result = scan_token(contract)
 
-        # ==========================
-        # PAIR AGE
-        # ==========================
-        created = result.get("created", 0)
+            if not result:
+                bot.reply_to(
+                    message,
+                    "❌ Token data not found"
+                )
+                return
 
-        if created:
-            minutes = int((time.time() * 1000 - created) / 60000)
 
-            if minutes < 60:
-                pair_age = f"{minutes} Minutes"
-            elif minutes < 1440:
-                pair_age = f"{minutes // 60} Hours"
-            else:
-                pair_age = f"{minutes // 1440} Days"
-        else:
-            pair_age = "Unknown"
+            # SECURITY SAFE
+            try:
+                security = check_security(contract) or {}
+            except Exception as e:
+                print("SECURITY ERROR:", e)
+                security = {}
+
+
+            # DATA SAFE
+
+            marketcap = safe_float(
+                result.get("marketcap")
+            )
+
+            liquidity = safe_float(
+                result.get("liquidity")
+            )
+
+            volume = safe_float(
+                result.get("volume")
+            )
+
+
+            # ==========================
+            # PAIR AGE
+            # ==========================
+
+            created = result.get("created",0)
+
             minutes = 999999
+            pair_age = "Unknown"
 
-        # ==========================
-        # ALPHA SCORE
-        # ==========================
-        score = 50
+            if created:
 
-        if result.get("liquidity", 0) >= 10000:
-            score += 15
+                minutes = int(
+                    (time.time()*1000 - created) / 60000
+                )
 
-        if result.get("volume", 0) >= 50000:
-            score += 15
+                if minutes < 60:
+                    pair_age=f"{minutes} Minutes"
 
-        if result.get("marketcap", 0) >= 100000:
-            score += 20
+                elif minutes < 1440:
+                    pair_age=f"{minutes//60} Hours"
 
-        if score >= 90:
-            rating = "🟢 Excellent"
-        elif score >= 75:
-            rating = "🟢 Good"
-        elif score >= 60:
-            rating = "🟡 Moderate"
-        else:
-            rating = "🔴 High Risk"
+                else:
+                    pair_age=f"{minutes//1440} Days"
 
-        # ==========================
-        # RISK ANALYSIS
-        # ==========================
-        warnings = []
 
-        if result.get("liquidity", 0) < 5000:
-            warnings.append("🔴 Very Low Liquidity")
+            # ==========================
+            # SCORE
+            # ==========================
 
-        if result.get("marketcap", 0) < 25000:
-            warnings.append("🟡 Very Low Market Cap")
+            score = 50
 
-        if minutes < 10:
-            warnings.append("🟠 Very New Pair")
+            if liquidity >= 10000:
+                score +=15
 
-        if len(warnings) == 0:
-            risk = "🟢 LOW"
-        elif len(warnings) == 1:
-            risk = "🟡 MEDIUM"
-        else:
-            risk = "🔴 HIGH"
+            if volume >=50000:
+                score +=15
 
-        warning_text = "\n".join(warnings)
+            if marketcap >=100000:
+                score +=20
 
-        if not warning_text:
-            warning_text = "✅ No major warnings detected"
 
-        # ==========================
-        # SEND RESULT
-        # ==========================
-        text = f"""🚀 Axchilies Alpha Scanner
+            if score >=90:
+                rating="🟢 Excellent"
 
-━━━━━━━━━━━━━━━━━━
+            elif score>=75:
+                rating="🟢 Good"
+
+            elif score>=60:
+                rating="🟡 Moderate"
+
+            else:
+                rating="🔴 Risk"
+
+
+            # ==========================
+            # WARNING
+            # ==========================
+
+            warnings=[]
+
+            if liquidity <5000:
+                warnings.append(
+                    "🔴 Low Liquidity"
+                )
+
+            if marketcap <25000:
+                warnings.append(
+                    "🟡 Low Market Cap"
+                )
+
+            if minutes <10:
+                warnings.append(
+                    "🟠 New Pair"
+                )
+
+
+            warning_text="\n".join(warnings)
+
+            if not warning_text:
+                warning_text="✅ No major warning"
+
+
+            # ==========================
+            # RESULT
+            # ==========================
+
+            text=f"""🚀 Axchilies Alpha Scanner
+
+━━━━━━━━━━━━━━
 
 🪙 Token
 {result.get('name','Unknown')} ({result.get('symbol','N/A')})
 
-💵 Price : ${result.get('price',0)}
-💰 Market Cap : ${result.get('marketcap',0):,.0f}
-💧 Liquidity : ${result.get('liquidity',0):,.0f}
-📈 Volume (24H) : ${result.get('volume',0):,.0f}
-🕒 Pair Age : {pair_age}
-⭐ Alpha Score : {score}/100
-📊 Rating : {rating}
-⚠️ Risk : {risk}
-🛡 Security Check
-   Mint Authority : {security.get('mint_authority','Unknown')}
-   Freeze Authority : {security.get('freeze_authority','Unknown')}
-   Security Risk : {security.get('risk','Unknown')}
-🚨 Warnings :
+💵 Price:
+${result.get('price',0)}
+
+💰 Market Cap:
+${marketcap:,.0f}
+
+💧 Liquidity:
+${liquidity:,.0f}
+
+📈 Volume:
+${volume:,.0f}
+
+🕒 Pair Age:
+{pair_age}
+
+⭐ Alpha Score:
+{score}/100
+
+📊 Rating:
+{rating}
+
+🛡 Security:
+Mint:
+{security.get('mint_authority','Unknown')}
+
+Freeze:
+{security.get('freeze_authority','Unknown')}
+
+Risk:
+{security.get('risk','Unknown')}
+
+🚨 Warning:
 {warning_text}
-🏦 DEX : {result.get('dex','Unknown')}
-⛓ Chain : {result.get('chain','Solana')}
-🔗 Chart :
+
+🏦 DEX:
+{result.get('dex','Unknown')}
+
+🔗 Chart:
 {result.get('url','N/A')}
 
-━━━━━━━━━━━━━━━━━━
-⚡ Powered by Axchilies Alpha Scanner
+━━━━━━━━━━━━━━
+⚡ Axchilies Alpha Scanner
 """
 
-        bot.reply_to(message, text)
+
+           
