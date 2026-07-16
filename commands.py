@@ -4,16 +4,17 @@ import time
 from telebot import TeleBot
 from scanner import scan_token
 
+
 def register_commands(bot: TeleBot):
 
-# ==========================  
-# START  
-# ==========================  
-@bot.message_handler(commands=['start'])  
-def start(message):  
-    bot.reply_to(  
-        message,  
-        """🚀 Welcome to Axchilies Alpha Scanner
+    # ==========================
+    # START
+    # ==========================
+    @bot.message_handler(commands=['start'])
+    def start(message):
+        bot.reply_to(
+            message,
+            """🚀 Welcome to Axchilies Alpha Scanner
 
 Your AI-powered assistant for discovering early crypto opportunities.
 
@@ -27,16 +28,16 @@ Your AI-powered assistant for discovering early crypto opportunities.
 Paste any Solana Contract Address to start scanning.
 
 💎 Stay Early. Stay Ahead."""
-)
+        )
 
-# ==========================  
-# HELP  
-# ==========================  
-@bot.message_handler(commands=['help'])  
-def help(message):  
-    bot.reply_to(  
-        message,  
-        """📚 Axchilies Alpha Scanner
+    # ==========================
+    # HELP
+    # ==========================
+    @bot.message_handler(commands=['help'])
+    def help(message):
+        bot.reply_to(
+            message,
+            """📚 Axchilies Alpha Scanner
 
 Commands
 
@@ -58,59 +59,59 @@ Example
 
 So11111111111111111111111111111111111111112
 """
-)
+        )
 
-# ==========================  
-# PING  
-# ==========================  
-@bot.message_handler(commands=['ping'])  
-def ping(message):  
-    bot.reply_to(message, "🏓 Pong!")  
+    # ==========================
+    # PING
+    # ==========================
+    @bot.message_handler(commands=['ping'])
+    def ping(message):
+        bot.reply_to(message, "🏓 Pong!")
 
-# ==========================  
-# STATUS  
-# ==========================  
-@bot.message_handler(commands=['status'])  
-def status(message):  
-    bot.reply_to(message, "🟢 Bot Status: Online")  
+    # ==========================
+    # STATUS
+    # ==========================
+    @bot.message_handler(commands=['status'])
+    def status(message):
+        bot.reply_to(message, "🟢 Bot Status: Online")
 
-# ==========================  
-# PRICE  
-# ==========================  
-@bot.message_handler(commands=['price'])  
-def price(message):  
+    # ==========================
+    # PRICE
+    # ==========================
+    @bot.message_handler(commands=['price'])
+    def price(message):
 
-    try:  
+        try:
 
-        args = message.text.split()  
+            args = message.text.split()
 
-        if len(args) < 2:  
-            bot.reply_to(  
-                message,  
-                "Usage:\n/price solana\n/price bitcoin"  
-            )  
-            return  
+            if len(args) < 2:
+                bot.reply_to(
+                    message,
+                    "Usage:\n/price solana\n/price bitcoin"
+                )
+                return
 
-        coin = args[1].lower()  
+            coin = args[1].lower()
 
-        url = f"https://api.coingecko.com/api/v3/coins/{coin}"  
+            url = f"https://api.coingecko.com/api/v3/coins/{coin}"
 
-        r = requests.get(url)  
+            r = requests.get(url)
 
-        if r.status_code != 200:  
-            bot.reply_to(message, "❌ Coin not found.")  
-            return  
+            if r.status_code != 200:
+                bot.reply_to(message, "❌ Coin not found.")
+                return
 
-        data = r.json()  
+            data = r.json()
 
-        name = data["name"]  
-        symbol = data["symbol"].upper()  
-        price = data["market_data"]["current_price"]["usd"]  
-        change = data["market_data"]["price_change_percentage_24h"]  
+            name = data["name"]
+            symbol = data["symbol"].upper()
+            price = data["market_data"]["current_price"]["usd"]
+            change = data["market_data"]["price_change_percentage_24h"]
 
-        bot.reply_to(  
-            message,  
-            f"""💰 {name} ({symbol})
+            bot.reply_to(
+                message,
+                f"""💰 {name} ({symbol})
 
 Price
 ${price:,.4f}
@@ -120,19 +121,19 @@ ${price:,.4f}
 
 Source
 CoinGecko"""
-)
+            )
 
-except Exception as e:  
-        bot.reply_to(message, f"Error: {e}")  
+        except Exception as e:
+            bot.reply_to(message, f"Error: {e}")
 
-# ==========================  
-# NEWPAIRS  
-# ==========================  
-@bot.message_handler(commands=['newpairs'])  
-def newpairs(message):  
-    bot.reply_to(  
-        message,  
-        """🚧 New Pair Scanner
+    # ==========================
+    # NEWPAIRS
+    # ==========================
+    @bot.message_handler(commands=['newpairs'])
+    def newpairs(message):
+        bot.reply_to(
+            message,
+            """🚧 New Pair Scanner
 
 Coming Soon
 
@@ -141,7 +142,7 @@ Coming Soon
 • Liquidity Filter
 • MarketCap Filter
 • Telegram Alerts"""
-)
+        )
 
     # ==========================
     # AUTO SCAN
