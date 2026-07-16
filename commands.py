@@ -1,6 +1,6 @@
-from scanner import scan_token
 import requests
 from telebot import TeleBot
+from scanner import scan_token
 
 
 def register_commands(bot: TeleBot):
