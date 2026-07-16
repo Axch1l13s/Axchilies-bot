@@ -24,6 +24,7 @@ def scan_token(contract):
         "liquidity": pair["liquidity"]["usd"],
         "volume": pair["volume"]["h24"],
         "marketcap": pair.get("marketCap", 0),
+        "created": pair.get("pairCreatedAt", 0),
         "dex": pair["dexId"],
         "chain": pair["chainId"],
         "url": pair["url"]
