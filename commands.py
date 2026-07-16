@@ -159,13 +159,9 @@ Coming Soon
 
         result = scan_token(contract)
 
-        result = scan_token(contract)
-
-result = scan_token(contract)
-
-       if result is None:
-           bot.reply_to(message, "❌ Token not found.")
-           return
+        if result is None:
+            bot.reply_to(message, "❌ Token not found.")
+            return
 
         # SECURITY CHECK
         security = check_security(contract)
@@ -193,13 +189,13 @@ result = scan_token(contract)
         # ==========================
         score = 50
 
-        if result["liquidity"] >= 10000:
+        if result.get("liquidity", 0) >= 10000:
             score += 15
 
-        if result["volume"] >= 50000:
+        if result.get("volume", 0) >= 50000:
             score += 15
 
-        if result["marketcap"] >= 100000:
+        if result.get("marketcap", 0) >= 100000:
             score += 20
 
         if score >= 90:
@@ -216,10 +212,10 @@ result = scan_token(contract)
         # ==========================
         warnings = []
 
-        if result["liquidity"] < 5000:
+        if result.get("liquidity", 0) < 5000:
             warnings.append("🔴 Very Low Liquidity")
 
-        if result["marketcap"] < 25000:
+        if result.get("marketcap", 0) < 25000:
             warnings.append("🟡 Very Low Market Cap")
 
         if minutes < 10:
@@ -245,24 +241,31 @@ result = scan_token(contract)
 ━━━━━━━━━━━━━━━━━━
 
 🪙 Token
-{result['name']} ({result['symbol']})
+{result.get('name','Unknown')} ({result.get('symbol','N/A')})
 
-💵 Price : ${result['price']}
-💰 Market Cap : ${result['marketcap']:,.0f}
-💧 Liquidity : ${result['liquidity']:,.0f}
-📈 Volume (24H) : ${result['volume']:,.0f}
+💵 Price : ${result.get('price',0)}
+💰 Market Cap : ${result.get('marketcap',0):,.0f}
+💧 Liquidity : ${result.get('liquidity',0):,.0f}
+📈 Volume (24H) : ${result.get('volume',0):,.0f}
 🕒 Pair Age : {pair_age}
+
 ⭐ Alpha Score : {score}/100
 📊 Rating : {rating}
 ⚠️ Risk : {risk}
+
 🛡 Security Check
-   Mint Authority : {security['mint_authority']}
-   Freeze Authority : {security['freeze_authority']}
-   Security Risk : {security['risk']}
-🚨 Warnings : {warning_text}
-🏦 DEX : {result['dex']}
-⛓ Chain : {result['chain']}
-🔗 Chart : {result['url']}
+Mint Authority : {security.get('mint_authority','Unknown')}
+Freeze Authority : {security.get('freeze_authority','Unknown')}
+Security Risk : {security.get('risk','Unknown')}
+
+🚨 Warnings :
+{warning_text}
+
+🏦 DEX : {result.get('dex','Unknown')}
+⛓ Chain : {result.get('chain','Solana')}
+
+🔗 Chart :
+{result.get('url','N/A')}
 
 ━━━━━━━━━━━━━━━━━━
 ⚡ Powered by Axchilies Alpha Scanner
