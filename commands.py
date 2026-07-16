@@ -165,7 +165,7 @@ result = scan_token(contract)
 
        if result is None:
            bot.reply_to(message, "❌ Token not found.")
-    return
+           return
 
         # SECURITY CHECK
         security = check_security(contract)
@@ -255,6 +255,10 @@ result = scan_token(contract)
 ⭐ Alpha Score : {score}/100
 📊 Rating : {rating}
 ⚠️ Risk : {risk}
+🛡 Security Check
+   Mint Authority : {security['mint_authority']}
+   Freeze Authority : {security['freeze_authority']}
+   Security Risk : {security['risk']}
 🚨 Warnings : {warning_text}
 🏦 DEX : {result['dex']}
 ⛓ Chain : {result['chain']}
