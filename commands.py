@@ -224,15 +224,20 @@ Coming Soon
         else:
             risk = "🔴 HIGH"
 
+        warning_text = "\n".join(warnings)
+
+        if not warning_text:
+            warning_text = "✅ No major warnings detected"
+
         # ==========================
-        # REPLY
+        # SEND RESULT
         # ==========================
-        bot.reply_to(
-            message,
-            f"""🚀 Axchilies Alpha Scanner
+        text = f"""🚀 Axchilies Alpha Scanner
+
+━━━━━━━━━━━━━━━━━━
 
 🪙 Token
-{result['name']} ({result['symbol']})
+{result['name']} ({result['symbol']}
 
 💵 Price
 ${result['price']}
@@ -240,14 +245,14 @@ ${result['price']}
 💰 Market Cap
 ${result['marketcap']:,.0f}
 
-🕒 Pair Age
-{pair_age}
-
 💧 Liquidity
 ${result['liquidity']:,.0f}
 
 📈 Volume (24H)
 ${result['volume']:,.0f}
+
+🕒 Pair Age
+{pair_age}
 
 ⭐ Alpha Score
 {score}/100
@@ -259,7 +264,7 @@ ${result['volume']:,.0f}
 {risk}
 
 🚨 Warnings
-{"\n".join(warnings) if warnings else "✅ No major warnings detected"}
+{warning_text}
 
 🏦 DEX
 {result['dex']}
@@ -270,7 +275,8 @@ ${result['volume']:,.0f}
 🔗 Chart
 {result['url']}
 
-━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━
 ⚡ Powered by Axchilies Alpha Scanner
 """
-        )
+
+        bot.reply_to(message, text)
