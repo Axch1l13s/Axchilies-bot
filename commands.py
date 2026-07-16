@@ -167,8 +167,8 @@ result = scan_token(contract)
            bot.reply_to(message, "❌ Token not found.")
     return
 
-# SECURITY CHECK
-security = check_security(contract)
+        # SECURITY CHECK
+        security = check_security(contract)
 
         # ==========================
         # PAIR AGE
