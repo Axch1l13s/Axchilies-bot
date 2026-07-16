@@ -180,12 +180,17 @@ Example:
 {result['url']}
 """
 
-        @bot.message_handler(func=lambda message: True)
+        bot.reply_to(message, text)
+
+    # ==========================
+    # AUTO SCAN
+    # ==========================
+    @bot.message_handler(func=lambda message: True)
     def auto_scan(message):
 
         text = message.text.strip()
 
-        # Deteksi Contract Address Solana
+        # Hanya proses jika terlihat seperti Solana contract address
         if not re.fullmatch(r"[1-9A-HJ-NP-Za-km-z]{32,44}", text):
             return
 
